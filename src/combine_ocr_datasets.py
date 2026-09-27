@@ -1,0 +1,58 @@
+import argparse
+import shutil
+from pathlib import Path
+
+
+def read_lines(dataset_dir, split):
+    path = Path(dataset_dir) / f"{split}.txt"
+    if not path.exists():
+        return []
+    return [line.rstrip("\n") for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def copy_split(src_dir, out_dir, split, prefix):
+    lines_out = []
+    target_img_dir = out_dir / split
+    target_img_dir.mkdir(parents=True, exist_ok=True)
+
+    for line in read_lines(src_dir, split):
+        rel_path, label = line.split("\t", 1)
+        src_img = Path(src_dir) / rel_path
+        if not src_img.exists():
+            continue
+        dst_name = f"{prefix}_{Path(rel_path).name}"
+        dst_img = target_img_dir / dst_name
+        shutil.copyfile(src_img, dst_img)
+        lines_out.append(f"{split}/{dst_name}\t{label}\n")
+    return lines_out
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Combine real and synthetic OCR datasets")
+    parser.add_argument("--real-dir", default="train_ocr_data")
+    parser.add_argument("--synthetic-dir", default="train_ocr_data_synthetic")
+    parser.add_argument("--out-dir", default="train_ocr_data_combined")
+    args = parser.parse_args()
+
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    for split in ["train", "val"]:
+        lines = []
+        lines.extend(copy_split(args.real_dir, out_dir, split, "real"))
+        lines.extend(copy_split(args.synthetic_dir, out_dir, split, "synthetic"))
+        (out_dir / f"{split}.txt").write_text("".join(lines), encoding="utf-8")
+        print(f"{split}: {len(lines)} samples")
+
+    chars = set()
+    for split in ["train", "val"]:
+        for line in read_lines(out_dir, split):
+            _, label = line.split("\t", 1)
+            chars.update(label)
+    (out_dir / "dict.txt").write_text("\n".join(sorted(chars)) + "\n", encoding="utf-8")
+    print(f"Combined dataset written to {out_dir}")
+    print("Characters:", "".join(sorted(chars)))
+
+
+if __name__ == "__main__":
+    main()

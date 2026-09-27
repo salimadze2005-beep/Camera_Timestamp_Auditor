@@ -1,0 +1,10 @@
+numpy>=1.26,<3
+opencv-python>=4.9
+pandas>=2.1
+pytz>=2024.1
+tqdm>=4.66
+easyocr>=1.7.2
+torch>=2.2
+torchvision>=0.17
+ultralytics>=8.3
+Pillow>=10.2

@@ -1,0 +1,10 @@
+torch
+torchvision
+easyocr
+ultralytics
+opencv-python
+pandas
+pytz
+tqdm
+albumentations  
+ 

@@ -1,0 +1,29 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Веса и кэш моделей
+models/*
+!models/.gitkeep
+*.pt
+*.pth
+*.onnx
+*.safetensors
+
+# Входные изображения и результаты
+data/images/*
+!data/images/.gitkeep
+results/*
+!results/.gitkeep
+failed_crops/
+*.log
+
+# Локальные манифесты и датасеты
+config/selected_manifest.csv
+train_ocr_data*/
+problem_gallery*/
