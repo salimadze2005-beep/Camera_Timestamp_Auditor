@@ -1,0 +1,38 @@
+name: Import sanitized Camera Timestamp Auditor
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/bootstrap-import.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore verified project archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          cat             .bootstrap/000.txt             .bootstrap/001.txt             .bootstrap/002.txt             .bootstrap/003.txt             .bootstrap/004.txt             .bootstrap/005.txt             .bootstrap/006.txt             .bootstrap/007.00.txt             .bootstrap/007.01.txt             .bootstrap/007.02.txt             .bootstrap/007.03.txt             .bootstrap/007.04.txt             .bootstrap/007.05.txt             .bootstrap/007.06.txt             .bootstrap/008.00.txt             .bootstrap/008.01.txt             .bootstrap/008.02.txt             .bootstrap/008.03.txt             | base64 -d > "$tmp/project.zip"
+
+          echo "0e62b93fa36b654da5426c244aa9c60010b2f1a0057c1a2cd3b72b30ab507ebf  $tmp/project.zip" | sha256sum -c -
+          unzip -q "$tmp/project.zip" -d "$tmp/unpacked"
+          cp -a "$tmp/unpacked/Camera_Timestamp_Auditor/." .
+
+          rm -rf .bootstrap
+          rm -f .github/workflows/bootstrap-import.yml
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Import sanitized Camera Timestamp Auditor project"
+          git push
