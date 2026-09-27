@@ -21,7 +21,8 @@ jobs:
           echo "a6ddd64ea99a39698101c5a5abc7500621d91d069b6446b88b08c698b581483a  .bootstrap/000.txt" | sha256sum -c -
           echo "2071ef680a1ae750f9156b96c965380fe06bbb5e07fab5f2c62d77c26f52ece2  .bootstrap/001.txt" | sha256sum -c -
           echo "4562e2828f9e940a916a9ffba78d74c604cfa4e88a86f7f3c3c50fc447175b33  .bootstrap/002.txt" | sha256sum -c -
-          echo "b3a7593ac0f5ed0c6014f37e8122c0b5398f70477d11806dd7e1385db62f9419  .bootstrap/003.txt" | sha256sum -c -
+          cat .bootstrap/003.0{0,1,2,3,4,5,6}.txt > /tmp/003.txt
+          echo "b3a7593ac0f5ed0c6014f37e8122c0b5398f70477d11806dd7e1385db62f9419  /tmp/003.txt" | sha256sum -c -
           echo "fe6835ed915969df447e227876ed42ee8a29d061546e2116f61bdd84c658ad65  .bootstrap/004.txt" | sha256sum -c -
           echo "53b4f2db6360f409a6d5437f36be05511ddc6630bec6e83fd3370f8e3c5ddfca  .bootstrap/005.txt" | sha256sum -c -
           echo "6f938cf46a8fafa0d8a7817a5f30055544708dfbe85bca32e026a2cb8558f7c2  .bootstrap/006.txt" | sha256sum -c -
