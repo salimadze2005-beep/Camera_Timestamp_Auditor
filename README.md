@@ -1,4 +1,4 @@
-# 🕒 Camera Timestamp Auditor
+# Camera Timestamp Auditor
 
 **OCR / Computer Vision система для автоматической проверки даты и времени на кадрах камер видеонаблюдения.**
 
@@ -20,7 +20,7 @@ Pipeline автоматизирует проверку времени на из�
 
 Основные статусы: `OK`, `TIMEZONE_MISMATCH`, `TIME_WRONG`, `NEED_REVIEW` и технические статусы ошибок.
 
-## Моя роль — Computer Vision Intern / ML Engineer
+## Моя роль - Computer Vision Intern / ML Engineer
 
 Проект выполнялся на производственной практике в **АО «Уфанет»**, команда из двух человек. Я работал над OCR/CV pipeline и логикой проверки timestamp:
 
@@ -33,7 +33,6 @@ Pipeline автоматизирует проверку времени на из�
 - анализировал проблемные OCR-примеры и добавлял повторную обработку сложных кадров;
 - итоговый pipeline достиг **95,5% по внутренней метрике** на датасете из **2000 изображений**; метрика учитывала корректное распознавание timestamp и выявление timezone mismatch.
 
-Проект показывает, что OCR-задача не заканчивается на распознавании текста: значительная часть качества достигается за счёт **нормализации, parser logic, candidate generation и валидации по контексту**.
 
 ## Архитектура
 
@@ -68,7 +67,7 @@ Timezone-aware validation
 
 ## Post-processing
 
-В [`src/postprocess_timestamp_results.py`](src/postprocess_timestamp_results.py) реализованы:
+В проекте реализованы:
 
 - замены OCR-символов `O → 0`, `I/L/| → 1`, `S → 5`, `B → 8` и др.;
 - обработка `AM/PM`;
@@ -97,8 +96,6 @@ Timezone-aware validation
 - error analysis
 - CSV pipelines
 - unit tests
-
-В ходе работы над проектом также использовались и сравнивались разные OCR-подходы, включая PaddleOCR.
 
 ## Структура репозитория
 
@@ -156,17 +153,3 @@ frame001.jpg,2026-06-08T14:31:22+05:00,Asia/Yekaterinburg,cam001,top-right
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-## Что показывает этот проект
-
-Для технического просмотра рекомендую начать с:
-
-- [`src/postprocess_timestamp_results.py`](src/postprocess_timestamp_results.py) — основная timestamp-логика;
-- [`src/run_custom_easyocr.py`](src/run_custom_easyocr.py) — OCR inference;
-- [`src/rerun_failed_easyocr.py`](src/rerun_failed_easyocr.py) — повторная обработка сложных примеров;
-- [`src/make_ocr_ensemble.py`](src/make_ocr_ensemble.py) — объединение результатов.
-
-В публичном репозитории нет кадров с рабочих камер, рабочих manifest-файлов, результатов внутренних проверок и закрытых весов моделей.
-
-## Лицензия
-
-Apache License 2.0. Подробнее — в файле [`LICENSE`](LICENSE).
