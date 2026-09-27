@@ -1,4 +1,4 @@
-name: Import sanitized Camera Timestamp Auditor
+name: Verify staged archive
 
 on:
   push:
@@ -10,29 +10,22 @@ permissions:
   contents: write
 
 jobs:
-  import:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Restore verified project archive
+      - name: Verify chunks
         shell: bash
         run: |
           set -euo pipefail
-          tmp="$(mktemp -d)"
-          cat             .bootstrap/000.txt             .bootstrap/001.txt             .bootstrap/002.txt             .bootstrap/003.txt             .bootstrap/004.txt             .bootstrap/005.txt             .bootstrap/006.txt             .bootstrap/007.00.txt             .bootstrap/007.01.txt             .bootstrap/007.02.txt             .bootstrap/007.03.txt             .bootstrap/007.04.txt             .bootstrap/007.05.txt             .bootstrap/007.06.txt             .bootstrap/008.00.txt             .bootstrap/008.01.txt             .bootstrap/008.02.txt             .bootstrap/008.03.txt             | base64 -d > "$tmp/project.zip"
-
-          echo "0e62b93fa36b654da5426c244aa9c60010b2f1a0057c1a2cd3b72b30ab507ebf  $tmp/project.zip" | sha256sum -c -
-          unzip -q "$tmp/project.zip" -d "$tmp/unpacked"
-          cp -a "$tmp/unpacked/Camera_Timestamp_Auditor/." .
-
-          rm -rf .bootstrap
-          rm -f .github/workflows/bootstrap-import.yml
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "Import sanitized Camera Timestamp Auditor project"
-          git push
+          echo "a6ddd64ea99a39698101c5a5abc7500621d91d069b6446b88b08c698b581483a  .bootstrap/000.txt" | sha256sum -c -
+          echo "2071ef680a1ae750f9156b96c965380fe06bbb5e07fab5f2c62d77c26f52ece2  .bootstrap/001.txt" | sha256sum -c -
+          echo "4562e2828f9e940a916a9ffba78d74c604cfa4e88a86f7f3c3c50fc447175b33  .bootstrap/002.txt" | sha256sum -c -
+          echo "b3a7593ac0f5ed0c6014f37e8122c0b5398f70477d11806dd7e1385db62f9419  .bootstrap/003.txt" | sha256sum -c -
+          echo "fe6835ed915969df447e227876ed42ee8a29d061546e2116f61bdd84c658ad65  .bootstrap/004.txt" | sha256sum -c -
+          echo "53b4f2db6360f409a6d5437f36be05511ddc6630bec6e83fd3370f8e3c5ddfca  .bootstrap/005.txt" | sha256sum -c -
+          echo "6f938cf46a8fafa0d8a7817a5f30055544708dfbe85bca32e026a2cb8558f7c2  .bootstrap/006.txt" | sha256sum -c -
+          cat .bootstrap/007.0{0,1,2,3,4,5,6}.txt > /tmp/007.txt
+          echo "3eb02583c019f7c347bc38508163f41257c9a74f94e6be87bad7d375f56746e5  /tmp/007.txt" | sha256sum -c -
+          cat .bootstrap/008.0{0,1,2,3}.txt > /tmp/008.txt
+          echo "7ea726645920d91c826bb36929d6e1d8f3befaadfab0e4e33edcb40bb09cfe08  /tmp/008.txt" | sha256sum -c -
