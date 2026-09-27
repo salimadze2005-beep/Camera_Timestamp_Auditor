@@ -295,6 +295,9 @@ def main():
     args = parser.parse_args()
 
     df = pd.read_csv(args.in_csv)
+    for column in ("parsed_time", "status_reason"):
+        if column in df.columns:
+            df[column] = df[column].astype(object)
     target_statuses = {s.strip() for s in args.only_statuses.split(",") if s.strip()}
 
     changed = 0
